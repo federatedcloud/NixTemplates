@@ -1,0 +1,10 @@
+#!/bin/bash
+SOURCE_NIX="source $ENVSDIR/.nix-profile/etc/profile.d/nix.sh"
+${SOURCE_NIX}
+
+#
+# Preload required packages into nix-store
+#
+nix-shell "$ENVSDIR/default.nix"
+
+/usr/sbin/sshd -D

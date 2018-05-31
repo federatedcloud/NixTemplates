@@ -1,24 +1,57 @@
-FROM nix_ubuntu_base:latest
+FROM nix_ubuntu_base:testing0
+
+ARG BASEDIR
+
+COPY $BASEDIR/config.nix $HOME/.config/nixpkgs/
+COPY $BASEDIR/dev-env.nix $ENVSDIR/
+COPY persist-env.sh $ENVSDIR/
 
 #
 # Initialize environment a bit for faster container spinup/use later
 #
 RUN $nixenv && cd /tmp && $ENVSDIR/persist-env.sh $ENVSDIR/dev-env.nix
 #
-RUN $nixenv && echo `which sbt`
-#
-RUN $nixenv && printf 'exit\n' | sbt -Dsbt.global.base=.sbt -Dsbt.boot.directory=.sbt -Dsbt.ivy.home=.ivy2 && \
-  rsync -a $HOME/ $HOME_TEMPLATE
 
+USER $nixuser
 
-#Copy this last to prevent rebuilds when changes occur in entrypoint:
-COPY ./entrypoint $ENVSDIR/
+# ------------------------------------------------------------
+# Set-Up SSH with our Github deploy key
+# ------------------------------------------------------------
+
+ENV SSHDIR ${HOME}/.ssh/
+
+RUN mkdir -p ${SSHDIR}
+
+ADD $BASEDIR/ssh/config ${SSHDIR}/config
+ADD $BASEDIR/ssh/id_rsa.mpi ${SSHDIR}/id_rsa
+ADD $BASEDIR/ssh/id_rsa.mpi.pub ${SSHDIR}/id_rsa.pub
+ADD $BASEDIR/ssh/id_rsa.mpi.pub ${SSHDIR}/authorized_keys
+
+RUN chmod -R 600 ${SSHDIR}* && \
+    chown -R ${USER}:${USER} ${SSHDIR}
+
+# ------------------------------------------------------------
+# Configure OpenMPI
+# ------------------------------------------------------------
+
 USER root
 
-# TODO: remove the python/pip bits if/when working in nix:
-# RUN wget https://bootstrap.pypa.io/get-pip.py && python3.6 get-pip.py && \
-#   python3.6 -m pip install pipenv --upgrade
-  
-RUN chown $nixuser:$nixuser $ENVSDIR/entrypoint
-USER $nixuser
-ENV PATH="${PATH}:/usr/local/bin"
+RUN rm -fr ${HOME}/.openmpi && mkdir -p ${HOME}/.openmpi
+ADD $BASEDIR/default-mca-params.conf ${HOME}/.openmpi/mca-params.conf
+RUN chown -R ${USER}:${USER} ${HOME}/.openmpi
+
+# ------------------------------------------------------------
+# Copy MPI4PY example scripts
+# ------------------------------------------------------------
+
+ENV TRIGGER 1
+
+ADD $BASEDIR/mpi4py_benchmarks ${HOME}/mpi4py_benchmarks
+RUN chown -R ${USER}:${USER} ${HOME}/mpi4py_benchmarks
+
+#Copy this last to prevent rebuilds when changes occur in them:
+COPY $BASEDIR/entrypoint $ENVSDIR/
+COPY $BASEDIR/default.nix $ENVSDIR/
+
+EXPOSE 22
+CMD ["./entrypoint"]
