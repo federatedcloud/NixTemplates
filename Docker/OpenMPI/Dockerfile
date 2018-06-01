@@ -1,4 +1,4 @@
-FROM nix_ubuntu_base:testing0
+FROM nix_ubuntu_base:fc91f40cf24fff6ee19d5ca49562b831a819ea76_testing
 
 ARG BASEDIR
 
@@ -27,14 +27,14 @@ ADD $BASEDIR/ssh/id_rsa.mpi ${SSHDIR}/id_rsa
 ADD $BASEDIR/ssh/id_rsa.mpi.pub ${SSHDIR}/id_rsa.pub
 ADD $BASEDIR/ssh/id_rsa.mpi.pub ${SSHDIR}/authorized_keys
 
+USER root
+
 RUN chmod -R 600 ${SSHDIR}* && \
     chown -R ${USER}:${USER} ${SSHDIR}
 
 # ------------------------------------------------------------
 # Configure OpenMPI
 # ------------------------------------------------------------
-
-USER root
 
 RUN rm -fr ${HOME}/.openmpi && mkdir -p ${HOME}/.openmpi
 ADD $BASEDIR/default-mca-params.conf ${HOME}/.openmpi/mca-params.conf
@@ -53,5 +53,9 @@ RUN chown -R ${USER}:${USER} ${HOME}/mpi4py_benchmarks
 COPY $BASEDIR/entrypoint $ENVSDIR/
 COPY $BASEDIR/default.nix $ENVSDIR/
 
+RUN chown $nixuser:$nixuser $ENVSDIR/entrypoint
+USER $nixuser
+ENV PATH="${PATH}:/usr/local/bin"
+
 EXPOSE 22
-CMD ["./entrypoint"]
+ENTRYPOINT "./entrypoint"

@@ -7,6 +7,11 @@ with import <nixpkgs> { };
   name = "openmpi-dev-env";
   paths = [
     #
+    # Always include nix, or environment will break
+    #
+    nix
+    
+    #
     # MPI-related packages
     #
     binutils

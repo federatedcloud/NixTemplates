@@ -4,6 +4,7 @@ FROM ubuntu:18.04
 ARG nixuser
 ARG ENVSDIR
 ENV ENVSDIR ${ENVSDIR}
+ENV nixuser ${nixuser}
 ENV HOME /home/$nixuser
 ENV HOME_TEMPLATE /template/$nixuser
 WORKDIR $ENVSDIR

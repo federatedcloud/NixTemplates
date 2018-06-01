@@ -7,4 +7,4 @@ ${SOURCE_NIX}
 #
 nix-shell "$ENVSDIR/default.nix"
 
-/usr/sbin/sshd -D
+"/nixenv/$(whoami)/.nix-profile/bin/sshd" -D
