@@ -6,28 +6,18 @@ version: "3"
 
 services:
   mpi_head:
-    build:
-        context: ./
-        dockerfile: ${BASEDIR}/Dockerfile
-        args:
-          - BASEDIR=${BASEDIR}
-    # image: openmpi
+    image: ${NIX_OMPI_IMAGE}
     ports: 
       - "22"
     links: 
       - mpi_node
-    networks:
-      - net
+    # networks:
+    #  - net
 
   mpi_node:
-    build:
-        context: ./
-        dockerfile: ${BASEDIR}/Dockerfile
-        args:
-          - BASEDIR=${BASEDIR}
-    # image: openmpi
-    networks:
-      - net
+    image: ${NIX_OMPI_IMAGE}
+    # networks:
+    #   - net
 
 # networks:
 #   net:

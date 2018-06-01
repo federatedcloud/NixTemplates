@@ -1,6 +1,8 @@
 #!/bin/bash
 
 #
+# Usage: source docker-compose-openmpi.sh <docker-compose argument list>
+#
 # This is a wrapper for docker-compose that performs
 # some variable substitution - just sue as you normally would
 # docker-compose, except for -f <file.yml>, which is already included
@@ -11,10 +13,9 @@
 
 BASEDIR="Docker/OpenMPI"
 export BASEDIR
-REPO=nix_ubuntu_openmpi
-TAG=testing0
-export NIX_IMAGE="${REPO}:${TAG}"
 
+# shellcheck source=Docker/OpenMPI/build.sh
+source "$BASEDIR/build.sh"
 docker-compose -f docker-compose-openmpi.yml "$@"
 
 

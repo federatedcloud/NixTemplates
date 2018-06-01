@@ -39,3 +39,20 @@ an archive of the existing build state, that is important for both immediate usa
 and as a last resort for users who can't get the build procedure to work down the
 road for some unforseen reason.
 
+# Building Images
+
+## Docker
+
+### nix_ubuntu_base
+
+```bash
+cd Docker
+source build.sh
+
+```
+
+### nix_ubuntu_openmpi
+
+```bash
+source Docker/OpenMPI/build.sh
+```

@@ -1,9 +1,13 @@
 #!/bin/bash
 
 # NIXUSER="$(whoami)"
+
+GITROOT=$(git rev-parse --show-toplevel)
+# shellcheck source=/dev/null
+source "$GITROOT/Utils/image_tag.sh"
 NIXUSER="nixuser"
 REPO=nix_ubuntu_base
-TAG=testing0
+TAG=$(git_image_tag)
 ENVSDIR="/nixenv/$NIXUSER"
 export NIX_IMAGE="${REPO}:${TAG}"
 docker build \
