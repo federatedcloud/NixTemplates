@@ -10,7 +10,6 @@ with import <nixpkgs> { };
     # MPI-related packages
     #
     binutils
-    gcc
     gfortran
     openmpi
     openssh
