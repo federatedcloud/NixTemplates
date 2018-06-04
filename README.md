@@ -9,7 +9,7 @@ using the [Nix](https://nixos.org/nix/) package manager.
 Nix provides reproducible builds for software, all the way down to the system level.
 This is done by way of keeping track of which commit revision of
 [nixpkgs](https://github.com/nixos/nixpkgs) was used at the time of the build.
-THe user can also pin versions of particular software dependencies by
+The user can also pin versions of particular software dependencies by
 coding them into the nix expression (think build script).
 
 ### Singularity
@@ -76,5 +76,5 @@ nix-shell . # should be from /nixenv/nixuser, or wherever default.nix was copied
 mpirun -n 2 python /home/nixuser/mpi4py_benchmarks/all_tests.py
 ```
 
-Too stop the container set, just press `Ctrl-C` in the terminal where you ran
+To stop the container set, just press `Ctrl-C` in the terminal where you ran
 `docker-compose-openmpi.sh`.
