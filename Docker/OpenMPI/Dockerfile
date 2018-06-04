@@ -1,5 +1,6 @@
 FROM nix_ubuntu_base:fc91f40cf24fff6ee19d5ca49562b831a819ea76_testing
 
+USER $nixuser
 ARG BASEDIR
 
 COPY $BASEDIR/config.nix $HOME/.config/nixpkgs/
@@ -12,7 +13,28 @@ COPY persist-env.sh $ENVSDIR/
 RUN $nixenv && cd /tmp && $ENVSDIR/persist-env.sh $ENVSDIR/dev-env.nix
 #
 
+USER root
+
+#
+# The below method isn't ideal, as it could break - better to copy in an sshd_config file
+# or somehow use nix to configure sshd
+# sed -i 's/.*PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config
+#
+# alternatively ...:
+# TODO: write a script to check if PermitRootLogin is already set, and replace it if so, else add it
+#
+ENV SSHD_PATH ""
+RUN SSHD_PATH=$(su -c "$nixenv && nix-build '<nixpkgs>' --no-build-output --no-out-link -A openssh" "${nixuser:?}") && \
+  mkdir -p /etc/ssh && cp "$SSHD_PATH/etc/ssh/sshd_config" /etc/ssh/sshd_config && \
+  mkdir /var/run/sshd && \
+  printf "PermitRootLogin yes\n" >> /etc/ssh/sshd_config && \
+  adduser --disabled-password --gecos "" sshd && \
+  mkdir -p /var/empty/sshd/etc && \
+  cd /var/empty/sshd/etc && \
+  ln -s /etc/localtime localtime
+  
 USER $nixuser
+
 
 # ------------------------------------------------------------
 # Set-Up SSH with our Github deploy key
@@ -50,11 +72,10 @@ ADD $BASEDIR/mpi4py_benchmarks ${HOME}/mpi4py_benchmarks
 RUN chown -R ${USER}:${USER} ${HOME}/mpi4py_benchmarks
 
 #Copy this last to prevent rebuilds when changes occur in them:
-COPY $BASEDIR/entrypoint $ENVSDIR/
+COPY $BASEDIR/entrypoint* $ENVSDIR/
 COPY $BASEDIR/default.nix $ENVSDIR/
 
 RUN chown $nixuser:$nixuser $ENVSDIR/entrypoint
-USER $nixuser
 ENV PATH="${PATH}:/usr/local/bin"
 
 EXPOSE 22

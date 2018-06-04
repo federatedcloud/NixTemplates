@@ -1,10 +1,5 @@
 #!/bin/bash
-SOURCE_NIX="source $ENVSDIR/.nix-profile/etc/profile.d/nix.sh"
-${SOURCE_NIX}
+su -c "./entrypoint-nixuser" "${nixuser:?}"
 
-#
-# Preload required packages into nix-store
-#
-nix-shell "$ENVSDIR/default.nix"
-
-"/nixenv/$(whoami)/.nix-profile/bin/sshd" -D
+ssh-keygen -A
+"/nixenv/$nixuser/.nix-profile/bin/sshd" -D

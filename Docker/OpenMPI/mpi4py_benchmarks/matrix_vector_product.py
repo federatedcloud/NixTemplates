@@ -53,7 +53,7 @@ vec[0] = 1.0                    #  ... besides vec[0]
 
 # Create my (local) slice of the matrix
 my_M = np.zeros((my_size, size))
-for i in xrange(my_size):
+for i in range(my_size):
     j = (my_offset+i-1) % size
     my_M[i,j] = 1.0
 
@@ -62,7 +62,7 @@ while counter < iter:
     comm.Barrier()                    ### Start stopwatch ###
     t_start = MPI.Wtime()
 
-    for t in xrange(20):
+    for t in range(20):
         my_new_vec = np.inner(my_M, vec)
 
         comm.Allgather(

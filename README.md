@@ -66,3 +66,12 @@ Note this will call the above OpenMPI `build.sh`, so no need to do both:
 ```bash
 source docker-compose-openmpi.sh up --scale mpi_head=1 --scale mpi_node=3
 ```
+
+Now from another terminal on the host system: 1) connect to the head node,
+2) start the relevant environment with `nix-shell`, and 3) run the mpi demo:
+
+```
+docker exec -u nixuser -it nixtemplates_mpi_head_1 /bin/bash
+nix-shell . # should be from /nixenv/nixuser, or wherever default.nix was copied to
+mpirun -n 2 python /home/nixuser/mpi4py_benchmarks/all_tests.py
+```
