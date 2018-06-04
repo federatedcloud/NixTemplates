@@ -39,6 +39,14 @@ an archive of the existing build state, that is important for both immediate usa
 and as a last resort for users who can't get the build procedure to work down the
 road for some unforseen reason.
 
+An advantage of using Nix is that users can also update their environment in a
+reproducible way without needing to change a Dockerfile or Singularity Recipe
+and build a new image (which may be inconvenient for some
+users): if the user changes the nix expression for a given environment,
+any additional packages or modified versions of packages that are already installed
+are added to the nix store (`/nix/store`) immediately, and the user can check in their
+nix expressions (`.nix` files) to version control as needed.
+
 # Building Images
 
 ## Docker
