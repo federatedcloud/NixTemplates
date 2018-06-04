@@ -75,3 +75,6 @@ docker exec -u nixuser -it nixtemplates_mpi_head_1 /bin/bash
 nix-shell . # should be from /nixenv/nixuser, or wherever default.nix was copied to
 mpirun -n 2 python /home/nixuser/mpi4py_benchmarks/all_tests.py
 ```
+
+Too stop the container set, just press `Ctrl-C` in the terminal where you ran
+`docker-compose-openmpi.sh`.
