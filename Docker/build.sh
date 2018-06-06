@@ -6,23 +6,6 @@
 # **** Pick a Distro to build below by uncommenting a section ****
 #
 
-#
-# For Alpine
-#
-BASEIMG="alpine:3.7"
-BASEOS="alpine"
-ADDUSER="adduser -D -g \"\""
-DISTRO_INSTALL_CMDS="alpine_install_cmds.sh"
-
-#
-# For Ubuntu
-#
-#
-# # BASEIMG="nvidia/cuda:8.0-cudnn7-runtime-ubuntu16.04"
-# BASEIMG="ubuntu:18.04"
-# BASEOS="ubuntu"
-# ADDUSER="adduser --disabled-password --gecos \"\""
-# DISTRO_INSTALL_CMDS="ubuntu_install_cmds.sh"
 
 GITROOT=$(git rev-parse --show-toplevel)
 # shellcheck source=/dev/null

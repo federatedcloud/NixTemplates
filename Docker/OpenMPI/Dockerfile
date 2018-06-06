@@ -1,16 +1,20 @@
-FROM nix_ubuntu_base:fc91f40cf24fff6ee19d5ca49562b831a819ea76_testing
+ARG BASEOS
+FROM nix_${BASEOS}_base:b12579b732300282dfa249a432d68cfafac543c0
 
-USER $nixuser
+USER root
 ARG BASEDIR
+ARG ADDUSER
 
 COPY $BASEDIR/config.nix $HOME/.config/nixpkgs/
 COPY $BASEDIR/dev-env.nix $ENVSDIR/
-COPY persist-env.sh $ENVSDIR/
+COPY Utils/persist-env.sh $ENVSDIR/
+RUN chown -R $nixuser:$nixuser $ENVSDIR
 
 #
 # Initialize environment a bit for faster container spinup/use later
 #
-RUN $nixenv && cd /tmp && $ENVSDIR/persist-env.sh $ENVSDIR/dev-env.nix
+USER $nixuser
+RUN $nixenv && cd /tmp && sh $ENVSDIR/persist-env.sh $ENVSDIR/dev-env.nix
 #
 
 USER root
@@ -28,7 +32,7 @@ RUN SSHD_PATH=$(su -c "$nixenv && nix-build '<nixpkgs>' --no-build-output --no-o
   mkdir -p /etc/ssh && cp "$SSHD_PATH/etc/ssh/sshd_config" /etc/ssh/sshd_config && \
   mkdir /var/run/sshd && \
   printf "PermitRootLogin yes\n" >> /etc/ssh/sshd_config && \
-  adduser --disabled-password --gecos "" sshd && \
+  id -u sshd || ${ADDUSER} sshd && \
   mkdir -p /var/empty/sshd/etc && \
   cd /var/empty/sshd/etc && \
   ln -s /etc/localtime localtime
@@ -52,7 +56,7 @@ ADD $BASEDIR/ssh/id_rsa.mpi.pub ${SSHDIR}/authorized_keys
 USER root
 
 RUN chmod -R 600 ${SSHDIR}* && \
-    chown -R ${USER}:${USER} ${SSHDIR}
+    chown -R ${nixuser}:${nixuser} ${SSHDIR}
 
 # ------------------------------------------------------------
 # Configure OpenMPI
@@ -60,7 +64,7 @@ RUN chmod -R 600 ${SSHDIR}* && \
 
 RUN rm -fr ${HOME}/.openmpi && mkdir -p ${HOME}/.openmpi
 ADD $BASEDIR/default-mca-params.conf ${HOME}/.openmpi/mca-params.conf
-RUN chown -R ${USER}:${USER} ${HOME}/.openmpi
+RUN chown -R ${nixuser}:${nixuser} ${HOME}/.openmpi
 
 # ------------------------------------------------------------
 # Copy MPI4PY example scripts
@@ -69,7 +73,7 @@ RUN chown -R ${USER}:${USER} ${HOME}/.openmpi
 ENV TRIGGER 1
 
 ADD $BASEDIR/mpi4py_benchmarks ${HOME}/mpi4py_benchmarks
-RUN chown -R ${USER}:${USER} ${HOME}/mpi4py_benchmarks
+RUN chown -R ${nixuser}:${nixuser} ${HOME}/mpi4py_benchmarks
 
 #Copy this last to prevent rebuilds when changes occur in them:
 COPY $BASEDIR/entrypoint* $ENVSDIR/
@@ -79,4 +83,4 @@ RUN chown $nixuser:$nixuser $ENVSDIR/entrypoint
 ENV PATH="${PATH}:/usr/local/bin"
 
 EXPOSE 22
-ENTRYPOINT "./entrypoint"
+ENTRYPOINT ["/bin/sh", "./entrypoint"]

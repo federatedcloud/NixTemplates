@@ -1,5 +1,5 @@
 #!/bin/bash
-su -c "./entrypoint-nixuser" "${nixuser:?}"
+su -c "/bin/sh ./entrypoint-nixuser" "${nixuser:?}"
 
 ssh-keygen -A
 "/nixenv/$nixuser/.nix-profile/bin/sshd" -D
