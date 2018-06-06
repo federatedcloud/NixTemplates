@@ -5,7 +5,8 @@
 #
 # **** Pick a Distro to build below by uncommenting a section ****
 #
-
+# source "ubuntu_envs.sh"
+source "alpine_envs.sh"
 
 GITROOT=$(git rev-parse --show-toplevel)
 # shellcheck source=/dev/null

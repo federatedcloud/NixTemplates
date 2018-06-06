@@ -1,6 +1,5 @@
 ARG BASEIMG
 FROM ${BASEIMG}
-# FROM nvidia/cuda:8.0-cudnn7-runtime-ubuntu16.04
 
 ARG nixuser
 ARG ADDUSER
@@ -14,7 +13,7 @@ WORKDIR $ENVSDIR
 
 MAINTAINER Brandon Barker <brandon.barker@cornell.edu>
 
-RUN ${ADDUSER} $nixuser && \
+RUN $ADDUSER $nixuser && \
   mkdir -m 0755 /nix && \
   mkdir -p $HOME_TEMPLATE && \
   mkdir -p /run/user/$(id -u $nixuser) && chown $nixuser:$nixuser /run/user/$(id -u $nixuser) && \
@@ -62,4 +61,4 @@ RUN $nixenv && nix-channel --add https://nixos.org/channels/nixpkgs-unstable nix
   
 RUN $nixenv && nix-channel --update
 
-CMD ["/bin/bash"]
+CMD ["/bin/sh"]
