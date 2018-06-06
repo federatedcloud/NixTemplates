@@ -1,7 +1,10 @@
-FROM ubuntu:18.04
+ARG BASEIMG
+FROM ${BASEIMG}
 # FROM nvidia/cuda:8.0-cudnn7-runtime-ubuntu16.04
 
 ARG nixuser
+ARG ADDUSER
+ARG DISTRO_INSTALL_CMDS
 ARG ENVSDIR
 ENV ENVSDIR ${ENVSDIR}
 ENV nixuser ${nixuser}
@@ -11,8 +14,7 @@ WORKDIR $ENVSDIR
 
 MAINTAINER Brandon Barker <brandon.barker@cornell.edu>
 
-RUN adduser --disabled-password --gecos "" $nixuser && \
-  echo "$nixuser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && \
+RUN ${ADDUSER} $nixuser && \
   mkdir -m 0755 /nix && \
   mkdir -p $HOME_TEMPLATE && \
   mkdir -p /run/user/$(id -u $nixuser) && chown $nixuser:$nixuser /run/user/$(id -u $nixuser) && \
@@ -21,13 +23,8 @@ RUN adduser --disabled-password --gecos "" $nixuser && \
 #
 # TODO: remove GCC when moving back to nix python
 #
-RUN echo "nameserver 8.8.8.8" | tee /etc/resolv.conf > /dev/null && \
-  apt update -y && apt install -y --no-install-recommends wget && \
-  wget -O spc.deb http://launchpadlibrarian.net/249551255/software-properties-common_0.96.20_all.deb && \
-  dpkg -i spc.deb; rm -f spc.deb && apt install -y -f && \
-  apt install -y --no-install-recommends bzip2 ca-certificates gcc wget && \
-  apt clean && \
-  wget https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -P /etc/bash_completion.d/
+COPY "./${DISTRO_INSTALL_CMDS}" /tmp/
+RUN "/tmp/${DISTRO_INSTALL_CMDS}"
 
 RUN echo "nixbld:x:30000:nixbld1,nixbld2,nixbld3,nixbld4,nixbld5,nixbld6,nixbld7,nixbld8,nixbld9,nixbld10,nixbld11,nixbld12,nixbld13,nixbld14,nixbld15,nixbld16,nixbld17,nixbld18,nixbld19,nixbld20,nixbld21,nixbld22,nixbld23,nixbld24,nixbld25,nixbld26,nixbld27,nixbld28,nixbld29,nixbld30" >> /etc/group \
   && for i in $(seq 1 30); do echo "nixbld$i:x:$((30000 + $i)):30000:::" >> /etc/passwd; done 
