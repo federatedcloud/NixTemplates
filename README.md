@@ -54,7 +54,7 @@ nix expressions (`.nix` files) to version control as needed.
 ### Switching the base image
 
 Since nix is used for package management, we support
-multiple base images: currently ubuntu variants and docker.
+multiple base images: currently Ubuntu and Alpine variants.
 To use presets for these, select what you want in the `build.sh`
 scripts, e.g., one of:
 
