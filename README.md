@@ -80,6 +80,14 @@ source build.sh
 
 ### nix_ubuntu_openmpi
 
+####  Setting up ssh
+
+1. `cd Docker/OpenMPI/`
+2. `mkdir ssh`
+3. `cd ssh && ssh-keygen -t rsa -f id_rsa.mpi -N '' && cd ..`
+4. Create a file called [config](https://github.com/CornellCAC/docker.openmpi/blob/master/ssh/config) and add the line `StrictHostKeyChecking no`
+5. `chmod 700 -R ssh`
+
 **Simple build**
 
 ```bash
@@ -106,10 +114,3 @@ mpirun -n 2 python /home/nixuser/mpi4py_benchmarks/all_tests.py
 To stop the container set, just press `Ctrl-C` in the terminal where you ran
 `docker-compose-openmpi.sh`.
 
-## Setting up ssh
-
-1. `cd Docker/OpenMPI/`
-2. `mkdir ssh`
-3. `ssh-keygen -t rsa -f id_rsa.mpi`
-4. Create a file called [config](https://github.com/CornellCAC/docker.openmpi/blob/master/ssh/config) and add the line `StrictHostKeyChecking no`
-5. `chmod 700 -R ssh`
