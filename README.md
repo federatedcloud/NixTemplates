@@ -85,8 +85,8 @@ source build.sh
 1. `cd Docker/OpenMPI/`
 2. `mkdir ssh`
 3. `cd ssh && ssh-keygen -t rsa -f id_rsa.mpi -N '' && cd ..`
-4. Create a file called [config](https://github.com/CornellCAC/docker.openmpi/blob/master/ssh/config) and add the line `StrictHostKeyChecking no`
-5. `chmod 700 -R ssh`
+4. `echo "StrictHostKeyChecking no" > ssh/config`
+5. `chmod 400 -R ssh`
 
 **Simple build**
 
