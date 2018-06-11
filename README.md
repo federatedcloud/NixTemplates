@@ -70,15 +70,27 @@ source "ubuntu_envs.sh"
 
 Alpine is the default. You may also wish to create your own variant.
 
+You may need to  make a separate copy or clone of the repo and checkout out the 
+`hash` corresponding to the `hash` in `FROM nix_${BASEOS}_base:hash` in 
+`Docker/OpenMPI/Dockerfile`, and build the base as specified in the next step,
+assuming you can't pull it from a Docker registry such as DockerHub.
+
+
 ### nix_ubuntu_base
 
 ```bash
-cd Docker
-source build.sh
-
+ cd Docker && source build.sh && cd ..
 ```
 
 ### nix_ubuntu_openmpi
+
+####  Setting up ssh
+
+1. `cd Docker/OpenMPI/`
+2. `mkdir ssh`
+3. `cd ssh && ssh-keygen -t rsa -f id_rsa.mpi -N '' && cd ..`
+4. `echo "StrictHostKeyChecking no" > ssh/config && cc ../..` 
+5. `chmod 500 ssh && chmod 400 ssh/*`
 
 **Simple build**
 
@@ -105,3 +117,4 @@ mpirun -n 2 python /home/nixuser/mpi4py_benchmarks/all_tests.py
 
 To stop the container set, just press `Ctrl-C` in the terminal where you ran
 `docker-compose-openmpi.sh`.
+

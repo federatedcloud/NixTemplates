@@ -19,9 +19,6 @@ RUN $ADDUSER $nixuser && \
   mkdir -p /run/user/$(id -u $nixuser) && chown $nixuser:$nixuser /run/user/$(id -u $nixuser) && \
   chown -R $nixuser:$nixuser /nix $ENVSDIR $HOME $HOME_TEMPLATE
 
-#
-# TODO: remove GCC when moving back to nix python
-#
 COPY "./${DISTRO_INSTALL_CMDS}" /tmp/
 RUN "/tmp/${DISTRO_INSTALL_CMDS}"
 
