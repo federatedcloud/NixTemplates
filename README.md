@@ -89,7 +89,7 @@ assuming you can't pull it from a Docker registry such as DockerHub.
 1. `cd Docker/OpenMPI/`
 2. `mkdir ssh`
 3. `cd ssh && ssh-keygen -t rsa -f id_rsa.mpi -N '' && cd ..`
-4. `echo "StrictHostKeyChecking no" > ssh/config && cc ../..` 
+4. `echo "StrictHostKeyChecking no" > ssh/config && cd ../..` 
 5. `chmod 500 ssh && chmod 400 ssh/*`
 
 **Simple build**
