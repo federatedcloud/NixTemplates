@@ -1,0 +1,73 @@
+Bootstrap: docker
+From: ${BASEIMG}
+%files
+"./${DISTRO_INSTALL_CMDS}" /tmp/
+./config.nix $HOME/.config/nixpkgs/
+%labels
+MAINTAINER Brandon Barker <brandon.barker@cornell.edu>
+%post
+
+ENVSDIR=${ENVSDIR}
+nixuser=${nixuser}
+HOME=/home/$nixuser
+HOME_TEMPLATE=/template/$nixuser
+cd $ENVSDIR
+
+
+$ADDUSER $nixuser && \
+mkdir -m 0755 /nix && \
+mkdir -p $HOME_TEMPLATE && \
+mkdir -p /run/user/$(id -u $nixuser) && chown $nixuser:$nixuser /run/user/$(id -u $nixuser) && \
+chown -R $nixuser:$nixuser /nix $ENVSDIR $HOME $HOME_TEMPLATE
+
+#
+# TODO: remove GCC when moving back to nix python
+#
+"/tmp/${DISTRO_INSTALL_CMDS}"
+
+echo "nixbld:x:30000:nixbld1,nixbld2,nixbld3,nixbld4,nixbld5,nixbld6,nixbld7,nixbld8,nixbld9,nixbld10,nixbld11,nixbld12,nixbld13,nixbld14,nixbld15,nixbld16,nixbld17,nixbld18,nixbld19,nixbld20,nixbld21,nixbld22,nixbld23,nixbld24,nixbld25,nixbld26,nixbld27,nixbld28,nixbld29,nixbld30" >> /etc/group \
+&& for i in $(seq 1 30); do echo "nixbld$i:x:$((30000 + $i)):30000:::" >> /etc/passwd; done
+
+chown -R $nixuser:$nixuser $ENVSDIR $HOME
+
+#
+# Install a few additional Ubuntu packages that are tedious to do from Nix
+# (This is commented out; x11-apps shouldn't be in base image)
+#
+# RUN apt install -y --no-install-recommends x11-apps && \
+#  apt clean
+
+USER $nixuser
+
+wget -O- http://nixos.org/releases/nix/nix-2.0.2/nix-2.0.2-x86_64-linux.tar.bz2 | bzcat - | tar xf - \
+&& USER=$nixuser HOME=$ENVSDIR sh nix-*-x86_64-linux/install \
+&& ln -s /nix/var/nix/profiles/per-user/$nixuser/profile $HOME/.nix-profile
+
+#
+# This broke at some point, so trying system certs for now:
+# GIT_SSL_CAINFO=$ENVSDIR/.nix-profile/etc/ssl/certs/ca-bundle.crt \
+# 
+PATH=$ENVSDIR/.nix-profile/bin:$ENVSDIR/.nix-profile/sbin:/bin:/sbin:/usr/bin:/usr/sbin
+GIT_SSL_CAINFO=/etc/ssl/certs/ca-certificates.crt
+NIX_SSL_CERT_FILE=$GIT_SSL_CAINFO
+NIX_PATH=/nix/var/nix/profiles/per-user/$nixuser/channels/
+  
+nixenv=". $ENVSDIR/.nix-profile/etc/profile.d/nix.sh"
+
+$nixenv && nix-channel --add https://nixos.org/channels/nixpkgs-unstable nixpkgs && \
+nix-channel --add https://nixos.org/channels/nixos-unstable nixos
+  
+$nixenv && nix-channel --update
+
+%environment
+export ENVSDIR=${ENVSDIR}
+export nixuser=${nixuser}
+export HOME=/home/$nixuser
+export HOME_TEMPLATE=/template/$nixuser
+export PATH=$ENVSDIR/.nix-profile/bin:$ENVSDIR/.nix-profile/sbin:/bin:/sbin:/usr/bin:/usr/sbin
+export GIT_SSL_CAINFO=/etc/ssl/certs/ca-certificates.crt
+export NIX_SSL_CERT_FILE=$GIT_SSL_CAINFO
+export NIX_PATH=/nix/var/nix/profiles/per-user/$nixuser/channels/
+export nixenv=". $ENVSDIR/.nix-profile/etc/profile.d/nix.sh"
+%runscript
+exec /bin/bash "$@"
