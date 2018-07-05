@@ -8,3 +8,8 @@
 # Don't store ssh keys:
 #
 ssh/
+
+#Singularity
+Singularity
+*.img
+*.simg

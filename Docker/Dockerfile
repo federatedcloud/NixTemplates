@@ -8,16 +8,14 @@ ARG ENVSDIR
 ENV ENVSDIR ${ENVSDIR}
 ENV nixuser ${nixuser}
 ENV HOME /home/$nixuser
-ENV HOME_TEMPLATE /template/$nixuser
 WORKDIR $ENVSDIR
 
 MAINTAINER Brandon Barker <brandon.barker@cornell.edu>
 
 RUN $ADDUSER $nixuser && \
   mkdir -m 0755 /nix && \
-  mkdir -p $HOME_TEMPLATE && \
   mkdir -p /run/user/$(id -u $nixuser) && chown $nixuser:$nixuser /run/user/$(id -u $nixuser) && \
-  chown -R $nixuser:$nixuser /nix $ENVSDIR $HOME $HOME_TEMPLATE
+  chown -R $nixuser:$nixuser /nix $ENVSDIR $HOME
 
 COPY "./${DISTRO_INSTALL_CMDS}" /tmp/
 RUN "/tmp/${DISTRO_INSTALL_CMDS}"
