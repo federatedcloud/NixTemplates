@@ -93,6 +93,14 @@ singularity image.create nix-overaly.img
 singularity run --contain --overlay nix-overaly.img nix_alpine_base\:f4e13f805157c7f55ab319fe235ca1ab26e988a0_testing.img
 ```
 
+**Note:** If you rebuild the image, you will likely need to either delete or move the old
+image to another location, unless the git commit has change, in which case the image filename
+changes automatically.
+
+**Important note:** If you update a given singularity image, you will also 
+likely need to create a new overlay image to go along with it, otherwise you 
+risk undefined behavior.
+
 ### Testing Nix
 
 Once you have build an image and started a container as above, you can test it out by installing

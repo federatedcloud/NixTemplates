@@ -12,5 +12,6 @@ ssh/
 
 #Singularity
 Singularity
+Singularity*_testing
 *.img
 *.simg
