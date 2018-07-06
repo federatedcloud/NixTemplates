@@ -14,7 +14,8 @@ coding them into the nix expression (think build script).
 
 ### Singularity
 
-Singularity is like a Docker container, but without process isolation.
+Singularity is like a Docker container, but without process isolation
+(at least [by default](https://www.sylabs.io/guides/2.5.1/user-guide/appendix.html?highlight=containall#singularity-action-flags)).
 So it isn't a process container, but it is a filesystem container.
 Unlike Docker, Singularity provides a non-layered filesystem. This may
 have benefits for reproducibility, but also means increased file size if
@@ -49,9 +50,8 @@ nix expressions (`.nix` files) to version control as needed.
 
 # Building Images
 
-## Docker
 
-### Switching the base image
+## Switching the base image
 
 Since nix is used for package management, we support
 multiple base images: currently Ubuntu and Alpine variants.
@@ -76,26 +76,56 @@ You may need to  make a separate copy or clone of the repo and checkout out the
 assuming you can't pull it from a Docker registry such as DockerHub.
 
 
-### nix_ubuntu_base
+## nix_ubuntu_base
+
+### Docker
 
 ```bash
- cd Docker && source build.sh && cd ..
+cd Base && source build.sh && cd ..
+
 ```
 
-### nix_ubuntu_openmpi
+### Singularity
 
-####  Setting up ssh
+```bash
+sudo ./build-singularity.sh
+singularity image.create nix-overaly.img
+singularity run --contain --overlay nix-overaly.img nix_alpine_base\:f4e13f805157c7f55ab319fe235ca1ab26e988a0_testing.img
+```
 
-1. `cd Docker/OpenMPI/`
+**Note:** If you rebuild the image, you will likely need to either delete or move the old
+image to another location, unless the git commit has change, in which case the image filename
+changes automatically.
+
+**Important note:** If you update a given singularity image, you will also 
+likely need to create a new overlay image to go along with it, otherwise you 
+risk undefined behavior.
+
+### Testing Nix
+
+Once you have build an image and started a container as above, you can test it out by installing
+your favorite tool (for instance ripgrep's `rg` command) into your environment using Nix:
+
+```bash
+nix-env -i ripgrep
+```
+
+## nix_ubuntu_openmpi
+
+###  Setting up ssh
+
+1. `cd Base/OpenMPI/`
 2. `mkdir ssh`
 3. `cd ssh && ssh-keygen -t rsa -f id_rsa.mpi -N '' && cd ..`
 4. `echo "StrictHostKeyChecking no" > ssh/config && cd ../..` 
 5. `chmod 500 ssh && chmod 400 ssh/*`
 
+### Docker
+
 **Simple build**
 
 ```bash
-source Docker/OpenMPI/build.sh
+source Base/OpenMPI/build.sh
 ```
 
 **Testing OpenMPI**
@@ -117,4 +147,3 @@ mpirun -n 2 python /home/nixuser/mpi4py_benchmarks/all_tests.py
 
 To stop the container set, just press `Ctrl-C` in the terminal where you ran
 `docker-compose-openmpi.sh`.
-

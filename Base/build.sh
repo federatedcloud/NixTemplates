@@ -14,7 +14,7 @@ source "$GITROOT/Utils/image_tag.sh"
 NIXUSER="nixuser"
 REPO="nix_${BASEOS}_base"
 TAG=$(git_image_tag)
-ENVSDIR="/nixenv/$NIXUSER"
+export ENVSDIR="/nixenv/$NIXUSER"
 export NIX_IMAGE="${REPO}:${TAG}"
 docker build \
        --build-arg BASEIMG="$BASEIMG" \

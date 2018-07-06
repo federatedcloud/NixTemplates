@@ -8,16 +8,14 @@ ARG ENVSDIR
 ENV ENVSDIR ${ENVSDIR}
 ENV nixuser ${nixuser}
 ENV HOME /home/$nixuser
-ENV HOME_TEMPLATE /template/$nixuser
 WORKDIR $ENVSDIR
 
 MAINTAINER Brandon Barker <brandon.barker@cornell.edu>
 
 RUN $ADDUSER $nixuser && \
   mkdir -m 0755 /nix && \
-  mkdir -p $HOME_TEMPLATE && \
   mkdir -p /run/user/$(id -u $nixuser) && chown $nixuser:$nixuser /run/user/$(id -u $nixuser) && \
-  chown -R $nixuser:$nixuser /nix $ENVSDIR $HOME $HOME_TEMPLATE
+  chown -R $nixuser:$nixuser /nix $ENVSDIR $HOME
 
 COPY "./${DISTRO_INSTALL_CMDS}" /tmp/
 RUN "/tmp/${DISTRO_INSTALL_CMDS}"
@@ -37,7 +35,7 @@ RUN chown -R $nixuser:$nixuser $ENVSDIR $HOME
 
 USER $nixuser
 
-RUN wget -O- http://nixos.org/releases/nix/nix-2.0.2/nix-2.0.2-x86_64-linux.tar.bz2 | bzcat - | tar xf - \
+RUN wget -O- http://nixos.org/releases/nix/nix-2.0.4/nix-2.0.4-x86_64-linux.tar.bz2 | bzcat - | tar xf - \
     && USER=$nixuser HOME=$ENVSDIR sh nix-*-x86_64-linux/install \
     && ln -s /nix/var/nix/profiles/per-user/$nixuser/profile $HOME/.nix-profile
 

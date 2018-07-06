@@ -3,8 +3,15 @@
 *.log
 *#*
 *.#*
+.idea
 
 #
 # Don't store ssh keys:
 #
 ssh/
+
+#Singularity
+Singularity
+Singularity*_testing
+*.img
+*.simg

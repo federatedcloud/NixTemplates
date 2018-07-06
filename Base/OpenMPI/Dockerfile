@@ -1,5 +1,5 @@
 ARG BASEOS
-FROM nix_${BASEOS}_base:11a12ceb5c9cdedd3816acc783d193eeb1fe7fa6
+FROM nix_${BASEOS}_base:a49a3dc18918910727275e6d283b87efc0bfc478
 
 USER root
 ARG BASEDIR
