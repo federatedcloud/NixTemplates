@@ -63,7 +63,7 @@ echo "runscript user is $USER"
 
 if [ ! -f ${HOME}/.config/nixpkgs ]; then
   mkdir -p $HOME/.config/nixpkgs
-  cp /template/hometmp/config.nix $HOME/.config/nixpkgs/
+  cp -R /template/hometmp/.config/nixpkgs/* $HOME/.config/nixpkgs/
 fi
 
 
