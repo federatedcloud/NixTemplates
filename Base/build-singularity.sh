@@ -20,6 +20,6 @@ source "$HOME/.singularity_docker_creds.sh"
 cat "$HOME/.singularity_docker_creds.sh"
 echo "SINGULARITY_DOCKER_USERNAME is set to ${SINGULARITY_DOCKER_USERNAME}"
 echo "SINGULARITY_DOCKER_PASSWORD is set to ${SINGULARITY_DOCKER_PASSWORD}"
-cat Singularity.in | envsubst '${BASEIMG} ${ENVSDIR} ${DISTRO_INSTALL_CMDS}' > Singularity
-sudo singularity --debug build "${NIX_IMAGE}.img" Singularity
+cat InSingularity | envsubst '${BASEIMG} ${ENVSDIR} ${DISTRO_INSTALL_CMDS}' > "Singularity.base_${BASEOS}"
+sudo singularity --debug build "${NIX_IMAGE}.img" "Singularity.base_${BASEOS}"
 # docker build --pull --tag kurron/intellij-local:latest .

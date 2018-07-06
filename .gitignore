@@ -3,6 +3,7 @@
 *.log
 *#*
 *.#*
+.idea
 
 #
 # Don't store ssh keys:

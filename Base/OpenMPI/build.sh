@@ -7,8 +7,8 @@ BASEDIR=$(dirname "${BASH_SOURCE[0]}")
 # **** Pick a Distro to build below by uncommenting a section ****
 #
 # shellcheck source=/dev/null
-# source "$GITROOT/Docker/ubuntu_envs.sh"
-source "$GITROOT/Docker/alpine_envs.sh"
+# source "$GITROOT/Base/ubuntu_envs.sh"
+source "$GITROOT/Base/alpine_envs.sh"
 
 # shellcheck source=/dev/null
 source "$GITROOT/Utils/image_tag.sh"

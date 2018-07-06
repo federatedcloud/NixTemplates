@@ -11,10 +11,10 @@
 # See BASEDIR/build.sh for a simpler way to build the docker image, without compose
 #
 
-BASEDIR="Docker/OpenMPI"
+BASEDIR="Base/OpenMPI"
 export BASEDIR
 
-# shellcheck source=Docker/OpenMPI/build.sh
+# shellcheck source=Base/OpenMPI/build.sh
 source "$BASEDIR/build.sh"
 docker-compose -f docker-compose-openmpi.yml "$@"
 
