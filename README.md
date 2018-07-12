@@ -117,8 +117,10 @@ nix-env -i ripgrep
 1. `cd Base/OpenMPI/`
 2. `mkdir ssh`
 3. `cd ssh && ssh-keygen -t rsa -f id_rsa.mpi -N '' && cd ..`
-4. `echo "StrictHostKeyChecking no" > ssh/config && cd ../..` 
-5. `chmod 500 ssh && chmod 400 ssh/*`
+4. `echo "StrictHostKeyChecking no" > ssh/config` 
+5. `chmod 500 ssh && chmod 400 ssh/* && cd ../..`
+
+### Docker
 
 ### Docker
 
