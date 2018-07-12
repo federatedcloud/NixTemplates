@@ -122,8 +122,6 @@ nix-env -i ripgrep
 
 ### Docker
 
-### Docker
-
 **Simple build**
 
 ```bash
