@@ -1,0 +1,92 @@
+Bootstrap: docker
+From: nix_${BASEOS}_base:a49a3dc18918910727275e6d283b87efc0bfc478
+%files
+$BASEDIR/config.nix $HOME/.config/nixpkgs/
+$BASEDIR/dev-env.nix $ENVSDIR/
+Utils/persist-env.sh $ENVSDIR/
+$BASEDIR/ssh/config ${SSHDIR}/config
+$BASEDIR/ssh/id_rsa.mpi ${SSHDIR}/id_rsa
+$BASEDIR/ssh/id_rsa.mpi.pub ${SSHDIR}/id_rsa.pub
+$BASEDIR/ssh/id_rsa.mpi.pub ${SSHDIR}/authorized_keys
+$BASEDIR/default-mca-params.conf ${HOME}/.openmpi/mca-params.conf
+$BASEDIR/mpi4py_benchmarks ${HOME}/mpi4py_benchmarks
+$BASEDIR/entrypoint* $ENVSDIR/
+$BASEDIR/default.nix $ENVSDIR/
+%post
+
+USER root
+
+chown -R $nixuser:$nixuser $ENVSDIR
+
+#
+# Initialize environment a bit for faster container spinup/use later
+#
+USER $nixuser
+$nixenv && cd /tmp && sh $ENVSDIR/persist-env.sh $ENVSDIR/dev-env.nix
+#
+
+USER root
+
+#
+# The below method isn't ideal, as it could break - better to copy in an sshd_config file
+# or somehow use nix to configure sshd
+# sed -i 's/.*PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config
+#
+# alternatively ...:
+# TODO: write a script to check if PermitRootLogin is already set, and replace it if so, else add it
+#
+SSHD_PATH=""
+SSHD_PATH=$(su -c "$nixenv && nix-build '<nixpkgs>' --no-build-output --no-out-link -A openssh" "${nixuser:?}") && \
+mkdir -p /etc/ssh && cp "$SSHD_PATH/etc/ssh/sshd_config" /etc/ssh/sshd_config && \
+mkdir /var/run/sshd && \
+printf "PermitRootLogin yes\n" >> /etc/ssh/sshd_config && \
+id -u sshd || ${ADDUSER} sshd && \
+mkdir -p /var/empty/sshd/etc && \
+cd /var/empty/sshd/etc && \
+ln -s /etc/localtime localtime
+  
+USER $nixuser
+
+
+# ------------------------------------------------------------
+# Set-Up SSH with our Github deploy key
+# ------------------------------------------------------------
+
+SSHDIR=${HOME}/.ssh/
+
+mkdir -p ${SSHDIR}
+
+
+USER root
+
+chmod -R 600 ${SSHDIR}* && \
+chown -R ${nixuser}:${nixuser} ${SSHDIR}
+
+# ------------------------------------------------------------
+# Configure OpenMPI
+# ------------------------------------------------------------
+
+rm -fr ${HOME}/.openmpi && mkdir -p ${HOME}/.openmpi
+chown -R ${nixuser}:${nixuser} ${HOME}/.openmpi
+
+# ------------------------------------------------------------
+# Copy MPI4PY example scripts
+# ------------------------------------------------------------
+
+TRIGGER=1
+
+chown -R ${nixuser}:${nixuser} ${HOME}/mpi4py_benchmarks
+
+#Copy this last to prevent rebuilds when changes occur in them:
+
+chown $nixuser:$nixuser $ENVSDIR/entrypoint
+PATH="${PATH}:/usr/local/bin"
+
+# EXPOSE 22
+%environment
+export SSHD_PATH=""
+export SSHDIR=${HOME}/.ssh/
+export TRIGGER=1
+export PATH="${PATH}:/usr/local/bin"
+%runscript
+exec /bin/bash "$@"
