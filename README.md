@@ -89,6 +89,13 @@ cd Base && source build.sh && cd ..
 
 #### Running from Singularity Hub
 
+First visit the [collection](https://www.singularity-hub.org/collections/1220) associated
+with this repository on Singularity Hub. You'll notice that the Tag (Branch) may be truncated
+due to the fact that we use the full commit hash. To see the full hash, click on the "Complete"
+button under the "Status" column for a recent base image, e.g., an image starting with 
+`nix_alpine_base_` under the "Tag (Branch)" column. 
+
+
 ```bash
 singularity image.create nix-overaly.img
 singularity run --contain --overlay nix-overaly.img nix_alpine_base_82b5d9a742ad593a353f6160bce846227a0f4e4d
