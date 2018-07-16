@@ -15,11 +15,11 @@ NIXUSER="nixuser"
 REPO="nix_${BASEOS}_base"
 TAG=$(git_image_tag)
 export ENVSDIR="/nixenv/$NIXUSER"
-export NIX_IMAGE="${REPO}:${TAG}"
+export NIX_IMAGE="${REPO}_${TAG}"
 source "$HOME/.singularity_docker_creds.sh"
 cat "$HOME/.singularity_docker_creds.sh"
 echo "SINGULARITY_DOCKER_USERNAME is set to ${SINGULARITY_DOCKER_USERNAME}"
 echo "SINGULARITY_DOCKER_PASSWORD is set to ${SINGULARITY_DOCKER_PASSWORD}"
-cat InSingularity | envsubst '${BASEIMG} ${ENVSDIR} ${DISTRO_INSTALL_CMDS}' > "Singularity.${NIX_IMAGE}"
+cat SingTemplate | envsubst '${BASEIMG} ${ENVSDIR} ${DISTRO_INSTALL_CMDS}' > "Singularity.${NIX_IMAGE}"
 sudo singularity --debug build "${NIX_IMAGE}.img" "Singularity.${NIX_IMAGE}"
 # docker build --pull --tag kurron/intellij-local:latest .
