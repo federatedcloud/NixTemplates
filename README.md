@@ -88,7 +88,7 @@ cd Base && source build.sh && cd ..
 ### Singularity
 
 ```bash
-sudo ./build-singularity.sh
+./build-singularity.sh
 singularity image.create nix-overaly.img
 singularity run --contain --overlay nix-overaly.img nix_alpine_base\:f4e13f805157c7f55ab319fe235ca1ab26e988a0_testing.img
 ```
