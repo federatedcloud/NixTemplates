@@ -15,7 +15,7 @@ NIXUSER="nixuser"
 REPO="nix_${BASEOS}_base"
 TAG=$(git_image_tag)
 export ENVSDIR="/nixenv/$NIXUSER"
-export NIX_IMAGE="${REPO}:${TAG}"
+export NIX_IMAGE="${REPO}_${TAG}"
 source "$HOME/.singularity_docker_creds.sh"
 cat "$HOME/.singularity_docker_creds.sh"
 echo "SINGULARITY_DOCKER_USERNAME is set to ${SINGULARITY_DOCKER_USERNAME}"
