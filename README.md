@@ -87,10 +87,19 @@ cd Base && source build.sh && cd ..
 
 ### Singularity
 
+#### Running from Singularity Hub
+
+```bash
+singularity image.create nix-overaly.img
+singularity run --contain --overlay nix-overaly.img nix_alpine_base_82b5d9a742ad593a353f6160bce846227a0f4e4d
+```
+
+#### Building And Running
+
 ```bash
 ./build-singularity.sh
 singularity image.create nix-overaly.img
-singularity run --contain --overlay nix-overaly.img nix_alpine_base\:f4e13f805157c7f55ab319fe235ca1ab26e988a0_testing.img
+singularity run --contain --overlay nix-overaly.img nix_alpine_base_82b5d9a742ad593a353f6160bce846227a0f4e4d.img
 ```
 
 **Note:** If you rebuild the image, you will likely need to either delete or move the old
