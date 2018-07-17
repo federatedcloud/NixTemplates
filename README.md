@@ -98,7 +98,7 @@ button under the "Status" column for a recent base image, e.g., an image startin
 
 ```bash
 singularity image.create nix-overaly.img
-singularity run --contain --overlay nix-overaly.img nix_alpine_base_82b5d9a742ad593a353f6160bce846227a0f4e4d
+singularity run --contain --overlay nix-overaly.img shub://federatedcloud/NixTemplates:nix_alpine_base_82b5d9a742ad593a353f6160bce846227a0f4e4d
 ```
 
 #### Building And Running

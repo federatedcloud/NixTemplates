@@ -14,6 +14,10 @@ export nixenv=". $ENVSDIR/.nix-profile/etc/profile.d/nix.sh"
 mkdir -p $SINGULARITY_ROOTFS/template/hometmp/.config/nixpkgs
 mkdir -p $SINGULARITY_ROOTFS/$ENVSDIR
 
+# TODO: make this safer, or wait for Singularity to support better inheritance:
+# For posterity; use sed to remove last line that starts an interactive shell:
+cat $SINGULARITY_ROOTFS/.singularity.d/runscript | sed '$d' > $SINGULARITY_ROOTFS/.singularity.d/runscript-nixbase
+
 %files
 ./${DISTRO_INSTALL_CMDS} /template/
 ./config.nix /template/hometmp/.config/nixpkgs/
