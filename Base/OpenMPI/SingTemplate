@@ -1,9 +1,9 @@
-# Bootstrap: shub
-# From: federatedcloud/NixTemplates:nix_alpine_base_82b5d9a742ad593a353f6160bce846227a0f4e4d
+Bootstrap: shub
+From: federatedcloud/NixTemplates:nix_alpine_base_14e053b44868adf9413cad2c6394cfbdfb149b81
 
 # For development:
-Bootstrap: localimage
-From: Base/nix_alpine_base_bc4bd803c3aaa8622b493bcf66190c3944706ec3_testing.img
+# Bootstrap: localimage
+# From: Base/nix_alpine_base_bc4bd803c3aaa8622b493bcf66190c3944706ec3_testing.img
 
 %environment
 export TRIGGER=1
