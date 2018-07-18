@@ -12,18 +12,15 @@ export PATH="${PATH}:/usr/local/bin"
 %setup
 
 %files
-./Base/OpenMPI/config.nix /template/hometmp/.config/nixpkgs/
-./Base/OpenMPI/dev-env.nix /nixenv/nixuser/
-Utils/persist-env.sh /nixenv/nixuser/
-./Base/OpenMPI/mpi4py_benchmarks /nixenv/nixuser/
-./Base/OpenMPI/entrypoint* /nixenv/nixuser/
-./Base/OpenMPI/default.nix /nixenv/nixuser/
-./Base/OpenMPI/default.sh /nixenv/nixuser/
+config.nix /template/hometmp/.config/nixpkgs/
+dev-env.nix /nixenv/nixuser/
+../../Utils/persist-env.sh /nixenv/nixuser/
+mpi4py_benchmarks /nixenv/nixuser/
+entrypoint* /nixenv/nixuser/
+default.nix /nixenv/nixuser/
+default.sh /nixenv/nixuser/
 
 %runscript
-
-USER=$(whoami)
-echo "runscript user is $USER"
 
 # Run the base nix runscript to initialize nix
 sh /.singularity.d/runscript-nixbase
@@ -34,7 +31,7 @@ cp -R /template/hometmp/.config/nixpkgs/* $HOME/.config/nixpkgs/
 $nixenv && cd /tmp && sh /nixenv/nixuser/persist-env.sh /nixenv/nixuser/dev-env.nix
 
 # TODO: May need this later
-# cp ./Base/OpenMPI/default-mca-params.conf ${HOME}/.openmpi/mca-params.conf
+# cp default-mca-params.conf ${HOME}/.openmpi/mca-params.conf
 
 #TODO: check if "$@", if not, run default.sh
 # exec /bin/sh "$@"
