@@ -180,7 +180,7 @@ See instructions [above](#nix_base) for how to use singularity hub in general wi
 
 ```bash
 singularity image.create -s 4096 nix-overlay.img
-singularity run --contain --overlay nix-overlay.img shub://federatedcloud/NixTemplates:nix_alpine_openmpi_64b6d177a14fe6f8d890e353f4843baf83b41eb5
+singularity run --contain --overlay nix-overlay.img shub://federatedcloud/NixTemplates:nix_alpine_openmpi_3cdef444dbb9648d67074bbaab8216851d0dd11d
 ```
 
 
