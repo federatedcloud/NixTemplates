@@ -3,6 +3,9 @@
 GITROOT=$(git rev-parse --show-toplevel)
 BASEDIR=$(dirname "${BASH_SOURCE[0]}")
 export BASEDIR
+ROOTREL=$(realpath --relative-to="$BASEDIR" "$GITROOT")
+export ROOTREL
+
 
 #
 # **** Pick a Distro to build below by uncommenting a section ****
@@ -22,5 +25,5 @@ echo "NIX_OMPI_IMAGE is $NIX_OMPI_IMAGE"
 
 # echo "SINGULARITY_DOCKER_USERNAME is set to ${SINGULARITY_DOCKER_USERNAME}"
 # echo "SINGULARITY_DOCKER_PASSWORD is set to ${SINGULARITY_DOCKER_PASSWORD}"
-cat "${BASEDIR}/SingTemplate" | envsubst '${BASEDIR} ${BASEOS} ${ENVSDIR}' > "${BASEDIR}/Singularity.${NIX_OMPI_IMAGE}"
-sudo singularity --debug build "${BASEDIR}/${NIX_OMPI_IMAGE}.img" "${BASEDIR}/Singularity.${NIX_OMPI_IMAGE}"
+cat "SingTemplate" | envsubst '${ROOTREL} ${BASEOS} ${ENVSDIR}' > "Singularity.${NIX_OMPI_IMAGE}"
+sudo singularity --debug build "${NIX_OMPI_IMAGE}.img" "Singularity.${NIX_OMPI_IMAGE}"

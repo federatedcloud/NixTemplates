@@ -87,6 +87,8 @@ cd Base && source build.sh && cd ..
 
 ### Singularity
 
+Choose one of the alternatives below (running from Singularity Hub or Building and Running).
+
 #### Running from Singularity Hub
 
 First visit the [collection](https://www.singularity-hub.org/collections/1220) associated
@@ -97,8 +99,8 @@ button under the "Status" column for a recent base image, e.g., an image startin
 
 
 ```bash
-singularity image.create nix-overaly.img
-singularity run --contain --overlay nix-overaly.img shub://federatedcloud/NixTemplates:nix_alpine_base_82b5d9a742ad593a353f6160bce846227a0f4e4d
+singularity image.create nix-overlay.img
+singularity run --contain --overlay nix-overlay.img shub://federatedcloud/NixTemplates:nix_alpine_base_82b5d9a742ad593a353f6160bce846227a0f4e4d
 ```
 
 #### Building And Running
@@ -107,8 +109,8 @@ singularity run --contain --overlay nix-overaly.img shub://federatedcloud/NixTem
 cd Base
 rm *.img
 ./build-singularity.sh
-singularity image.create nix-overaly.img
-singularity run --contain --overlay nix-overaly.img nix_alpine_base_82b5d9a742ad593a353f6160bce846227a0f4e4d.img
+singularity image.create nix-overlay.img
+singularity run --contain --overlay nix-overlay.img nix_alpine_base_82b5d9a742ad593a353f6160bce846227a0f4e4d.img
 ```
 
 **Note:** If you rebuild the image, you will likely need to either delete or move the old
@@ -169,17 +171,24 @@ To stop the container set, just press `Ctrl-C` in the terminal where you ran
 
 ### Singularity
 
+Choose one of the alternatives below (running from Singularity Hub or Building and Running).
+
 #### Running from Singularity Hub
 
 See instructions [above](#nix_base) for how to use singularity hub in general with this repository.
 
 
+```bash
+singularity image.create -s 4096 nix-overlay.img
+singularity run --contain --overlay nix-overlay.img shub://federatedcloud/NixTemplates:nix_alpine_openmpi_64b6d177a14fe6f8d890e353f4843baf83b41eb5
+```
+
+
 #### Building And Running
 
 ```bash
-rm ./Base/OpenMPI/*.img
-./Base/OpenMPI/build-singularity.sh
-cd Base/OpenMPI
+rm *.img
+./build-singularity.sh
 singularity image.create -s 4096 nix-overlay.img
 singularity run --contain --overlay nix-overlay.img nix_alpine_openmpi_84c67648e411aaf6e16f66c059135c680b40ee2f.img
 ```
