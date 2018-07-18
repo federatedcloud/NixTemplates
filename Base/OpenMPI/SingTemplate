@@ -15,10 +15,10 @@ export PATH="${PATH}:/usr/local/bin"
 $BASEDIR/config.nix /template/hometmp/.config/nixpkgs/
 $BASEDIR/dev-env.nix $ENVSDIR/
 Utils/persist-env.sh $ENVSDIR/
-$BASEDIR/default-mca-params.conf ${HOME}/.openmpi/mca-params.conf
-$BASEDIR/mpi4py_benchmarks ${HOME}/mpi4py_benchmarks
+$BASEDIR/mpi4py_benchmarks $ENVSDIR/
 $BASEDIR/entrypoint* $ENVSDIR/
 $BASEDIR/default.nix $ENVSDIR/
+$BASEDIR/default.sh $ENVSDIR/
 
 %runscript
 
@@ -33,4 +33,9 @@ cp -R /template/hometmp/.config/nixpkgs/* $HOME/.config/nixpkgs/
 
 $nixenv && cd /tmp && sh $ENVSDIR/persist-env.sh $ENVSDIR/dev-env.nix
 
-exec /bin/sh "$@"
+# TODO: May need this later
+# cp $BASEDIR/default-mca-params.conf ${HOME}/.openmpi/mca-params.conf
+
+#TODO: check if "$@", if not, run default.sh
+# exec /bin/sh "$@"
+exec /bin/sh "/nixenv/nixuser/default.sh"

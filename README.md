@@ -76,7 +76,7 @@ You may need to  make a separate copy or clone of the repo and checkout out the
 assuming you can't pull it from a Docker registry such as DockerHub.
 
 
-## nix_ubuntu_base
+## nix_base
 
 ### Docker
 
@@ -104,6 +104,8 @@ singularity run --contain --overlay nix-overaly.img shub://federatedcloud/NixTem
 #### Building And Running
 
 ```bash
+cd Base
+rm *.img
 ./build-singularity.sh
 singularity image.create nix-overaly.img
 singularity run --contain --overlay nix-overaly.img nix_alpine_base_82b5d9a742ad593a353f6160bce846227a0f4e4d.img
@@ -126,9 +128,11 @@ your favorite tool (for instance ripgrep's `rg` command) into your environment u
 nix-env -i ripgrep
 ```
 
-## nix_ubuntu_openmpi
+## nix_openmpi
 
-###  Setting up ssh
+### Docker
+
+####  Setting up ssh
 
 1. `cd Base/OpenMPI/`
 2. `mkdir ssh`
@@ -136,7 +140,6 @@ nix-env -i ripgrep
 4. `echo "StrictHostKeyChecking no" > ssh/config` 
 5. `chmod 500 ssh && chmod 400 ssh/* && cd ../..`
 
-### Docker
 
 **Simple build**
 
@@ -144,7 +147,7 @@ nix-env -i ripgrep
 source Base/OpenMPI/build.sh
 ```
 
-**Testing OpenMPI**
+#### Testing OpenMPI
 
 Note this will call the above OpenMPI `build.sh`, so no need to do both:
 
@@ -163,3 +166,29 @@ mpirun -n 2 python /home/nixuser/mpi4py_benchmarks/all_tests.py
 
 To stop the container set, just press `Ctrl-C` in the terminal where you ran
 `docker-compose-openmpi.sh`.
+
+### Singularity
+
+#### Running from Singularity Hub
+
+See instructions [above](#nix_base) for how to use singularity hub in general with this repository.
+
+
+#### Building And Running
+
+```bash
+rm ./Base/OpenMPI/*.img
+./Base/OpenMPI/build-singularity.sh
+cd Base/OpenMPI
+singularity image.create -s 4096 nix-overlay.img
+singularity run --contain --overlay nix-overlay.img nix_alpine_openmpi_84c67648e411aaf6e16f66c059135c680b40ee2f.img
+```
+
+#### Testing OpenMPI
+
+You will be dropped into a nix-shell, which in this template, sets up python and releveant libraries
+such as mpi4py.
+
+```
+mpirun -n 2 python /nixenv/nixuser/mpi4py_benchmarks/all_tests.py
+```
