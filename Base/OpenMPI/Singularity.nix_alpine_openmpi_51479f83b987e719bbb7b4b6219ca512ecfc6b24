@@ -13,14 +13,12 @@ export PATH="${PATH}:/usr/local/bin"
 
 %files
 config.nix /template/hometmp/.config/nixpkgs/
-dev-env.nix $ENVSDIR/
-mpi4py_benchmarks $ENVSDIR/
-entrypoint* $ENVSDIR/
-default.nix $ENVSDIR/
-default.sh $ENVSDIR/
-
-#$ROOTREL/Utils/persist-env.sh $ENVSDIR/
-Utils/persist-env.sh $ENVSDIR/
+dev-env.nix /nixenv/nixuser/
+mpi4py_benchmarks /nixenv/nixuser/
+entrypoint* /nixenv/nixuser/
+default.nix /nixenv/nixuser/
+default.sh /nixenv/nixuser/
+../../Utils/persist-env.sh /nixenv/nixuser/
 
 %runscript
 
@@ -30,7 +28,7 @@ sh /.singularity.d/runscript-nixbase
 # We need to overwrite the file from base
 cp -R /template/hometmp/.config/nixpkgs/* $HOME/.config/nixpkgs/
 
-$nixenv && cd /tmp && sh $ENVSDIR/persist-env.sh $ENVSDIR/dev-env.nix
+$nixenv && cd /tmp && sh /nixenv/nixuser/persist-env.sh /nixenv/nixuser/dev-env.nix
 
 # TODO: May need this later
 # cp default-mca-params.conf ${HOME}/.openmpi/mca-params.conf
