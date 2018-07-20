@@ -12,15 +12,18 @@ export PATH="${PATH}:/usr/local/bin"
 %setup
 
 %files
-config.nix /template/hometmp/.config/nixpkgs/
-dev-env.nix $ENVSDIR/
-$ROOTREL/Utils/persist-env.sh $ENVSDIR/
-mpi4py_benchmarks $ENVSDIR/
-entrypoint* $ENVSDIR/
-default.nix $ENVSDIR/
-default.sh $ENVSDIR/
+$BASEDIR/config.nix /template/hometmp/.config/nixpkgs/
+$BASEDIR/dev-env.nix $ENVSDIR/
+Utils/persist-env.sh $ENVSDIR/
+$BASEDIR/mpi4py_benchmarks $ENVSDIR/
+$BASEDIR/entrypoint* $ENVSDIR/
+$BASEDIR/default.nix $ENVSDIR/
+$BASEDIR/default.sh $ENVSDIR/
 
 %runscript
+
+USER=$(whoami)
+echo "runscript user is $USER"
 
 # Run the base nix runscript to initialize nix
 sh /.singularity.d/runscript-nixbase
@@ -31,7 +34,7 @@ cp -R /template/hometmp/.config/nixpkgs/* $HOME/.config/nixpkgs/
 $nixenv && cd /tmp && sh $ENVSDIR/persist-env.sh $ENVSDIR/dev-env.nix
 
 # TODO: May need this later
-# cp default-mca-params.conf ${HOME}/.openmpi/mca-params.conf
+# cp $BASEDIR/default-mca-params.conf ${HOME}/.openmpi/mca-params.conf
 
 #TODO: check if "$@", if not, run default.sh
 # exec /bin/sh "$@"
