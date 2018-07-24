@@ -112,11 +112,10 @@ singularity run --contain --overlay nix-overlay.img shub://federatedcloud/NixTem
 #### Building And Running
 
 ```bash
-cd Base
-rm *.img
-./build-singularity.sh
-singularity image.create nix-overlay.img
-singularity run --contain --overlay nix-overlay.img nix_alpine_base_82b5d9a742ad593a353f6160bce846227a0f4e4d.img
+rm nix*base*.img
+./build-base-singularity.sh
+singularity image.create nix-base-overlay.img
+singularity run --contain --overlay nix-base-overlay.img nix_alpine_base_82b5d9a742ad593a353f6160bce846227a0f4e4d.img
 ```
 
 **Note:** If you rebuild the image, you will likely need to either delete or move the old
