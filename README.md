@@ -151,12 +151,12 @@ nix-env -i ripgrep
 **Simple build**
 
 ```bash
-source Base/OpenMPI/build.sh
+source build-openmpi.sh 
 ```
 
 #### Testing OpenMPI
 
-Note this will call the above OpenMPI `build.sh`, so no need to do both:
+Note this will call the above OpenMPI `build-base.sh`, so no need to do both:
 
 ```bash
 source docker-compose-openmpi.sh up --scale mpi_head=1 --scale mpi_node=3

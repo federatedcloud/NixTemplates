@@ -25,5 +25,5 @@ echo "NIX_OMPI_IMAGE is $NIX_OMPI_IMAGE"
 
 # echo "SINGULARITY_DOCKER_USERNAME is set to ${SINGULARITY_DOCKER_USERNAME}"
 # echo "SINGULARITY_DOCKER_PASSWORD is set to ${SINGULARITY_DOCKER_PASSWORD}"
-cat "SingTemplate" | envsubst '${ROOTREL} ${BASEOS} ${ENVSDIR}' > "Singularity.${NIX_OMPI_IMAGE}"
+cat "SingTemplateOpenMPI" | envsubst '${ROOTREL} ${BASEOS} ${ENVSDIR}' > "Singularity.${NIX_OMPI_IMAGE}"
 sudo singularity --debug build "${NIX_OMPI_IMAGE}.img" "Singularity.${NIX_OMPI_IMAGE}"
