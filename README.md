@@ -80,10 +80,16 @@ assuming you can't pull it from a Docker registry such as DockerHub.
 
 ### Docker
 
-```bash
-cd Base && source build.sh && cd ..
+#### Building and Running
 
+Make sure to subsitute the appropriate image name in the second command
+(check your image list with `docker images | head`).
+
+```bash
+source build-base.sh
+docker run -i -t nix_alpine_base:abbaed5833f75be43892ccfc5999bd8f03f9583b_testing /bin/sh
 ```
+
 
 ### Singularity
 
