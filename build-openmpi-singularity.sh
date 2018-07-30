@@ -1,10 +1,13 @@
 #!/bin/bash
 
-GITROOT=$(git rev-parse --show-toplevel)
+# shellcheck source=/dev/null
+source "Utils/singularity-build-common.sh"
+
+# GITROOT=$(git rev-parse --show-toplevel)
 BASEDIR=$(dirname "${BASH_SOURCE[0]}")
 export BASEDIR
-ROOTREL=$(realpath --relative-to="$BASEDIR" "$GITROOT")
-export ROOTREL
+# ROOTREL=$(realpath --relative-to="$BASEDIR" "$GITROOT")
+# export ROOTREL
 
 
 #
@@ -12,10 +15,10 @@ export ROOTREL
 #
 # shellcheck source=/dev/null
 # source "$GITROOT/Base/ubuntu_envs.sh"
-source "$GITROOT/Base/alpine_envs.sh"
+source "Base/alpine_envs.sh"
 
 # shellcheck source=/dev/null
-source "$GITROOT/Utils/image_tag.sh"
+source "Utils/image_tag.sh"
 NIXUSER="nixuser"
 REPO="nix_${BASEOS}_openmpi"
 TAG=$(git_image_tag)
@@ -25,5 +28,6 @@ echo "NIX_OMPI_IMAGE is $NIX_OMPI_IMAGE"
 
 # echo "SINGULARITY_DOCKER_USERNAME is set to ${SINGULARITY_DOCKER_USERNAME}"
 # echo "SINGULARITY_DOCKER_PASSWORD is set to ${SINGULARITY_DOCKER_PASSWORD}"
-cat "SingTemplateOpenMPI" | envsubst '${ROOTREL} ${BASEOS} ${ENVSDIR}' > "Singularity.${NIX_OMPI_IMAGE}"
+cat "SingTemplateOpenMPI" | envsubst '${BASEOS} ${ENVSDIR}' > "Singularity.${NIX_OMPI_IMAGE}"
 sudo singularity --debug build "${NIX_OMPI_IMAGE}.img" "Singularity.${NIX_OMPI_IMAGE}"
+sudo chown "$SING_USER:$SING_GROUP" "${NIX_OMPI_IMAGE}.img"

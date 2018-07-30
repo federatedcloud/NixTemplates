@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# shellcheck source=/dev/null
+source "Utils/singularity-build-common.sh"
+
 # NIXUSER="$(whoami)"
 
 #
@@ -22,4 +25,6 @@ echo "SINGULARITY_DOCKER_USERNAME is set to ${SINGULARITY_DOCKER_USERNAME}"
 echo "SINGULARITY_DOCKER_PASSWORD is set to ${SINGULARITY_DOCKER_PASSWORD}"
 cat SingTemplateBase | envsubst '${BASEIMG} ${ENVSDIR} ${DISTRO_INSTALL_CMDS}' > "Singularity.${NIX_IMAGE}"
 sudo singularity --debug build "${NIX_IMAGE}.img" "Singularity.${NIX_IMAGE}"
-# docker build --pull --tag kurron/intellij-local:latest .
+sudo chown "$SING_USER:$SING_GROUP" "${NIX_IMAGE}.img"
+
+

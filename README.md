@@ -193,7 +193,7 @@ singularity run --contain --overlay nix-overlay.img shub://federatedcloud/NixTem
 
 ```bash
 rm *.img
-./build-singularity.sh
+./build-openmpi-singularity.sh
 singularity image.create -s 4096 nix-overlay.img
 singularity run --contain --overlay nix-overlay.img nix_alpine_openmpi_84c67648e411aaf6e16f66c059135c680b40ee2f.img
 ```
