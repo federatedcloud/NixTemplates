@@ -19,8 +19,8 @@ mkdir -p $SINGULARITY_ROOTFS//nixenv/nixuser
 cat $SINGULARITY_ROOTFS/.singularity.d/runscript | sed '$d' > $SINGULARITY_ROOTFS/.singularity.d/runscript-nixbase
 
 %files
-./alpine_install_cmds.sh /template/
-./config.nix /template/hometmp/.config/nixpkgs/
+./Base/alpine_install_cmds.sh /template/
+./Base/config.nix /template/hometmp/.config/nixpkgs/
 
 %labels
 MAINTAINER Brandon Barker <brandon.barker@cornell.edu>

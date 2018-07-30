@@ -1,5 +1,5 @@
 Bootstrap: shub
-From: federatedcloud/NixTemplates:nix_alpine_base_14e053b44868adf9413cad2c6394cfbdfb149b81
+From: federatedcloud/NixTemplates:nix_alpine_base_e51467b4ad06617b8b104f6c9066df915fb4dfbd
 
 # For development:
 # Bootstrap: localimage
