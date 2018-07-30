@@ -11,8 +11,6 @@ source "Utils/singularity-build-common.sh"
 # source "ubuntu_envs.sh"
 source "Base/alpine_envs.sh"
 
-# GITROOT=$(git rev-parse --show-toplevel)
-# shellcheck source=/dev/null
 source "Utils/image_tag.sh"
 NIXUSER="nixuser"
 REPO="nix_${BASEOS}_base"

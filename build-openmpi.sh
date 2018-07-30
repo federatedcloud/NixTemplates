@@ -1,16 +1,10 @@
 #!/bin/bash
 
-#GITROOT=$(git rev-parse --show-toplevel)
-#BASEDIR=$(dirname "${BASH_SOURCE[0]}")
-
 #
 # **** Pick a Distro to build below by uncommenting a section ****
 #
-# shellcheck source=/dev/null
-# source "$GITROOT/Base/ubuntu_envs.sh"
 source "Base/alpine_envs.sh"
 
-# shellcheck source=/dev/null
 source "Utils/image_tag.sh"
 REPO="nix_${BASEOS}_openmpi"
 TAG=$(git_image_tag)
