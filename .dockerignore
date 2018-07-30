@@ -1,2 +1,3 @@
 # Don't send singularity images to docker daemon!
 *.img
+*.simg
