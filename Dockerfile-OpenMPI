@@ -2,11 +2,10 @@ ARG BASEOS
 FROM nix_${BASEOS}_base:a49a3dc18918910727275e6d283b87efc0bfc478
 
 USER root
-ARG BASEDIR
 ARG ADDUSER
 
-COPY $BASEDIR/config.nix $HOME/.config/nixpkgs/
-COPY $BASEDIR/dev-env.nix $ENVSDIR/
+COPY OpenMPI/config.nix $HOME/.config/nixpkgs/
+COPY OpenMPI/dev-env.nix $ENVSDIR/
 COPY Utils/persist-env.sh $ENVSDIR/
 RUN chown -R $nixuser:$nixuser $ENVSDIR
 
@@ -48,10 +47,10 @@ ENV SSHDIR ${HOME}/.ssh/
 
 RUN mkdir -p ${SSHDIR}
 
-ADD $BASEDIR/ssh/config ${SSHDIR}/config
-ADD $BASEDIR/ssh/id_rsa.mpi ${SSHDIR}/id_rsa
-ADD $BASEDIR/ssh/id_rsa.mpi.pub ${SSHDIR}/id_rsa.pub
-ADD $BASEDIR/ssh/id_rsa.mpi.pub ${SSHDIR}/authorized_keys
+ADD OpenMPI/ssh/config ${SSHDIR}/config
+ADD OpenMPI/ssh/id_rsa.mpi ${SSHDIR}/id_rsa
+ADD OpenMPI/ssh/id_rsa.mpi.pub ${SSHDIR}/id_rsa.pub
+ADD OpenMPI/ssh/id_rsa.mpi.pub ${SSHDIR}/authorized_keys
 
 USER root
 
@@ -63,7 +62,7 @@ RUN chmod -R 600 ${SSHDIR}* && \
 # ------------------------------------------------------------
 
 RUN rm -fr ${HOME}/.openmpi && mkdir -p ${HOME}/.openmpi
-ADD $BASEDIR/default-mca-params.conf ${HOME}/.openmpi/mca-params.conf
+ADD OpenMPI/default-mca-params.conf ${HOME}/.openmpi/mca-params.conf
 RUN chown -R ${nixuser}:${nixuser} ${HOME}/.openmpi
 
 # ------------------------------------------------------------
@@ -72,12 +71,12 @@ RUN chown -R ${nixuser}:${nixuser} ${HOME}/.openmpi
 
 ENV TRIGGER 1
 
-ADD $BASEDIR/mpi4py_benchmarks ${HOME}/mpi4py_benchmarks
+ADD OpenMPI/mpi4py_benchmarks ${HOME}/mpi4py_benchmarks
 RUN chown -R ${nixuser}:${nixuser} ${HOME}/mpi4py_benchmarks
 
 #Copy this last to prevent rebuilds when changes occur in them:
-COPY $BASEDIR/entrypoint* $ENVSDIR/
-COPY $BASEDIR/default.nix $ENVSDIR/
+COPY OpenMPI/entrypoint* $ENVSDIR/
+COPY OpenMPI/default.nix $ENVSDIR/
 
 RUN chown $nixuser:$nixuser $ENVSDIR/entrypoint
 ENV PATH="${PATH}:/usr/local/bin"
