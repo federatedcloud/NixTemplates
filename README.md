@@ -80,10 +80,16 @@ assuming you can't pull it from a Docker registry such as DockerHub.
 
 ### Docker
 
-```bash
-cd Base && source build.sh && cd ..
+#### Building and Running
 
+Make sure to subsitute the appropriate image name in the second command
+(check your image list with `docker images | head`).
+
+```bash
+source build-base.sh
+docker run -i -t nix_alpine_base:abbaed5833f75be43892ccfc5999bd8f03f9583b_testing /bin/sh
 ```
+
 
 ### Singularity
 
@@ -106,11 +112,10 @@ singularity run --contain --overlay nix-overlay.img shub://federatedcloud/NixTem
 #### Building And Running
 
 ```bash
-cd Base
-rm *.img
-./build-singularity.sh
-singularity image.create nix-overlay.img
-singularity run --contain --overlay nix-overlay.img nix_alpine_base_82b5d9a742ad593a353f6160bce846227a0f4e4d.img
+rm nix*base*.img
+./build-base-singularity.sh
+singularity image.create nix-base-overlay.img
+singularity run --contain --overlay nix-base-overlay.img nix_alpine_base_82b5d9a742ad593a353f6160bce846227a0f4e4d.img
 ```
 
 **Note:** If you rebuild the image, you will likely need to either delete or move the old
@@ -146,12 +151,12 @@ nix-env -i ripgrep
 **Simple build**
 
 ```bash
-source Base/OpenMPI/build.sh
+source build-openmpi.sh 
 ```
 
 #### Testing OpenMPI
 
-Note this will call the above OpenMPI `build.sh`, so no need to do both:
+Note this will call the above OpenMPI `build-base.sh`, so no need to do both:
 
 ```bash
 source docker-compose-openmpi.sh up --scale mpi_head=1 --scale mpi_node=3
@@ -188,7 +193,7 @@ singularity run --contain --overlay nix-overlay.img shub://federatedcloud/NixTem
 
 ```bash
 rm *.img
-./build-singularity.sh
+./build-openmpi-singularity.sh
 singularity image.create -s 4096 nix-overlay.img
 singularity run --contain --overlay nix-overlay.img nix_alpine_openmpi_84c67648e411aaf6e16f66c059135c680b40ee2f.img
 ```

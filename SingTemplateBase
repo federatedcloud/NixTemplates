@@ -19,8 +19,8 @@ mkdir -p $SINGULARITY_ROOTFS/$ENVSDIR
 cat $SINGULARITY_ROOTFS/.singularity.d/runscript | sed '$d' > $SINGULARITY_ROOTFS/.singularity.d/runscript-nixbase
 
 %files
-./${DISTRO_INSTALL_CMDS} /template/
-./config.nix /template/hometmp/.config/nixpkgs/
+./Base/${DISTRO_INSTALL_CMDS} /template/
+./Base/config.nix /template/hometmp/.config/nixpkgs/
 
 %labels
 MAINTAINER Brandon Barker <brandon.barker@cornell.edu>

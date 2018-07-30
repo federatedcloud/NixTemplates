@@ -8,14 +8,11 @@
 # docker-compose, except for -f <file.yml>, which is already included
 #
 #
-# See BASEDIR/build.sh for a simpler way to build the docker image, without compose
+# See build-openmpi.sh for a simpler way to build the docker image, without compose
 #
 
-BASEDIR="Base/OpenMPI"
-export BASEDIR
-
 # shellcheck source=Base/OpenMPI/build.sh
-source "$BASEDIR/build.sh"
+source build-openmpi.sh
 docker-compose -f docker-compose-openmpi.yml "$@"
 
 
