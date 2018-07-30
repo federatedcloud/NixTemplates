@@ -1,5 +1,5 @@
 Bootstrap: shub
-From: federatedcloud/NixTemplates:nix_alpine_base_14e053b44868adf9413cad2c6394cfbdfb149b81
+From: federatedcloud/NixTemplates:nix_alpine_base_e51467b4ad06617b8b104f6c9066df915fb4dfbd
 
 # For development:
 # Bootstrap: localimage
@@ -12,13 +12,13 @@ export PATH="${PATH}:/usr/local/bin"
 %setup
 
 %files
-config.nix /template/hometmp/.config/nixpkgs/
-dev-env.nix /nixenv/nixuser/
-../../Utils/persist-env.sh /nixenv/nixuser/
-mpi4py_benchmarks /nixenv/nixuser/
-entrypoint* /nixenv/nixuser/
-default.nix /nixenv/nixuser/
-default.sh /nixenv/nixuser/
+Utils/persist-env.sh /nixenv/nixuser/
+OpenMPI/config.nix /template/hometmp/.config/nixpkgs/
+OpenMPI/dev-env.nix /nixenv/nixuser/
+OpenMPI/mpi4py_benchmarks /nixenv/nixuser/
+OpenMPI/entrypoint* /nixenv/nixuser/
+OpenMPI/default.nix /nixenv/nixuser/
+OpenMPI/default.sh /nixenv/nixuser/
 
 %runscript
 

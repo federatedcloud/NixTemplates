@@ -185,7 +185,7 @@ See instructions [above](#nix_base) for how to use singularity hub in general wi
 
 ```bash
 singularity image.create -s 4096 nix-overlay.img
-singularity run --contain --overlay nix-overlay.img shub://federatedcloud/NixTemplates:nix_alpine_openmpi_64b6d177a14fe6f8d890e353f4843baf83b41eb5
+singularity run --contain --overlay nix-overlay.img shub://federatedcloud/NixTemplates:nix_alpine_openmpi_6796a60398bb890002e7010593c14cf3731613a1
 ```
 
 
@@ -195,7 +195,7 @@ singularity run --contain --overlay nix-overlay.img shub://federatedcloud/NixTem
 rm *.img
 ./build-openmpi-singularity.sh
 singularity image.create -s 4096 nix-overlay.img
-singularity run --contain --overlay nix-overlay.img nix_alpine_openmpi_84c67648e411aaf6e16f66c059135c680b40ee2f.img
+singularity run --contain --overlay nix-overlay.img nix_alpine_openmpi_6796a60398bb890002e7010593c14cf3731613a1.img
 ```
 
 #### Testing OpenMPI
