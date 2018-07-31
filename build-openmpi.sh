@@ -1,8 +1,7 @@
 #!/bin/bash
 
-#
-# **** Pick a Distro to build below by uncommenting a section ****
-#
+source "OpenMPI/generate-keys.sh"
+
 source "Base/alpine_envs.sh"
 
 source "Utils/image_tag.sh"
