@@ -206,7 +206,21 @@ ABI issues, even if this requirement is met; the host OpenMPI should be bind-mou
 `/opt/openmpi`. The container has been configured to add the relevant subdirectories to
 `PATH` and `LD_LIBRARY_PATH`.
 
+For this to work successfully, a static build of MPI on the host is likely necessary:
+
+```
+./configure CFLAGS=-fPIC CXXFLAGS=-fPIC LDFLAGS=-static --prefix=/home/user/openmpi && make all install
+```
 
 ```bash
- singularity run --contain -B /path/to/host/mpi:/opt/openmpi --overlay nix-overlay.img shub://federatedcloud/NixTemplates:nix_alpine_openmpi_6796a60398bb890002e7010593c14cf3731613a1
+ patchelf --print-interpreter /opt/openmpi/bin/orterun
+ patchelf --set-interpreter /nix/store/v7hg431d55q30gy7hqlpiji3jnvi8gs3-glibc-2.27/lib/ld-linux-x86-64.so.2 /opt/openmpi/bin/orterun
+ patchelf --set-rpath /nix/store/vm7czzwvpwlsd9hkva2y3pr343vbc4zr-zlib-1.2.11/lib /opt/openmpi/bin/orterun
+```
+
+Note that due to some assumptions OpenMPI makes, the path on the host and in the container to
+MPI should be the same, so we only specify the host path so it will be the same in the container:
+
+```bash
+ singularity run --contain -B /path/to/host/mpi --overlay nix-overlay.img shub://federatedcloud/NixTemplates:nix_alpine_openmpi_6796a60398bb890002e7010593c14cf3731613a1
 ```

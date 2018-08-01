@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   src = null;
   shellHook = ''
     export LANG=en_US.UTF-8
-    export PATH="/opt/openmpi/bin:$PATH"
-    export LD_LIBRARY_PATH="/opt/openmpi/lib:$LD_LIBRARY_PATH"
+    export PATH="$HOME/openmpi/bin:$PATH"
+    export LD_LIBRARY_PATH="$HOME/openmpi/lib:$LD_LIBRARY_PATH"
   '';
 }
