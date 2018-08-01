@@ -197,16 +197,3 @@ such as mpi4py.
 ```
 mpirun -n 2 python /nixenv/nixuser/mpi4py_benchmarks/all_tests.py
 ```
-
-#### Multi-node MPI
-
-For multinode MPI, the same, equal or newer version of MPI must be available on the host. 
-Further, we have found that it should be bind-mounted into the container due to possible
-ABI issues, even if this requirement is met; the host OpenMPI should be bind-mounted to
-`/opt/openmpi`. The container has been configured to add the relevant subdirectories to
-`PATH` and `LD_LIBRARY_PATH`.
-
-
-```bash
- singularity run --contain -B /path/to/host/mpi:/opt/openmpi --overlay nix-overlay.img shub://federatedcloud/NixTemplates:nix_alpine_openmpi_6796a60398bb890002e7010593c14cf3731613a1
-```

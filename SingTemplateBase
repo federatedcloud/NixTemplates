@@ -13,8 +13,6 @@ export nixenv=". $ENVSDIR/.nix-profile/etc/profile.d/nix.sh"
 %setup
 mkdir -p $SINGULARITY_ROOTFS/template/hometmp/.config/nixpkgs
 mkdir -p $SINGULARITY_ROOTFS/$ENVSDIR
-# For host-mounted OpenMPI (optional, but needed for multinode runs):
-mkdir /opt/openmpi
 
 # TODO: make this safer, or wait for Singularity to support better inheritance:
 # For posterity; use sed to remove last line that starts an interactive shell:
