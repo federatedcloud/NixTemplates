@@ -23,7 +23,7 @@ OpenMPI/default.sh $ENVSDIR/
 %runscript
 
 # Run the base nix runscript to initialize nix
-sh /.singularity.d/runscript-nixbase
+source /.singularity.d/runscript-nixbase
 
 # We need to overwrite the file from base
 cp -R /template/hometmp/.config/nixpkgs/* $HOME/.config/nixpkgs/
