@@ -51,8 +51,8 @@ ENV \
   
 ENV nixenv ". $ENVSDIR/.nix-profile/etc/profile.d/nix.sh"
 
-RUN $nixenv && nix-channel --add https://nixos.org/channels/nixpkgs-unstable nixpkgs && \
-  nix-channel --add https://nixos.org/channels/nixos-unstable nixos
+RUN $nixenv && nix-channel --add https://nixos.org/channels/nixpkgs-20.03-darwin nixpkgs && \
+  nix-channel --add https://nixos.org/channels/nixos-20.03 nixos
   
 RUN $nixenv && nix-channel --update
 
