@@ -35,7 +35,7 @@ RUN chown -R $nixuser:$nixuser $ENVSDIR $HOME
 
 USER $nixuser
 
-RUN wget -O- http://nixos.org/releases/nix/nix-2.0.4/nix-2.0.4-x86_64-linux.tar.bz2 | bzcat - | tar xf - \
+RUN wget -O- http://nixos.org/releases/nix/nix-2.3.6/nix-2.3.6-x86_64-linux.tar.xz | tar xvfJ - \
     && USER=$nixuser HOME=$ENVSDIR sh nix-*-x86_64-linux/install \
     && ln -s /nix/var/nix/profiles/per-user/$nixuser/profile $HOME/.nix-profile
 
@@ -51,8 +51,8 @@ ENV \
   
 ENV nixenv ". $ENVSDIR/.nix-profile/etc/profile.d/nix.sh"
 
-RUN $nixenv && nix-channel --add https://nixos.org/channels/nixpkgs-unstable nixpkgs && \
-  nix-channel --add https://nixos.org/channels/nixos-unstable nixos
+RUN $nixenv && nix-channel --add https://nixos.org/channels/nixpkgs-20.03-darwin nixpkgs && \
+  nix-channel --add https://nixos.org/channels/nixos-20.03 nixos
   
 RUN $nixenv && nix-channel --update
 
